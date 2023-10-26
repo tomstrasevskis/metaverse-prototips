@@ -34,6 +34,7 @@ io.on('connection', (socket) => {
     // Share variables with client
     io.to(socket.id).emit('variables', {
 
+        landSize: config.landSize,
         backgroundColor: config.backgroundColor,
         landColor: config.landColor,
         ownedLandColor: config.ownedLandColor,
