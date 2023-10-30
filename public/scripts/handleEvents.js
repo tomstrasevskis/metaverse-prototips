@@ -1,8 +1,9 @@
 import * as THREE from 'three';
 import { buyButton, sellButton } from './handleUI.js';
+import { container } from '../client.js'
 
 function handleMouseClickEvent(camera, landMap, socket) {
-    window.addEventListener('click', (event) => {
+    container.addEventListener('click', (event) => {
         const mouse = new THREE.Vector2();
         mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
         mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;

@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { OutlineEffect } from 'three/addons/effects/OutlineEffect.js';
 import { handleMouseClickEvent } from './scripts/handleEvents.js';
-import { renderUI, resizeUI } from './scripts/handleUI.js';
+import { initUI, renderUI, resizeUI } from './scripts/handleUI.js';
 
 const socket = io(); // Initiate the connection between client and server
 
@@ -103,6 +103,9 @@ function init(backgroundColor) {
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
     container.appendChild(renderer.domElement);
+
+    // UI
+    initUI(container);
 
     // Effects
     effect = new OutlineEffect(renderer);
