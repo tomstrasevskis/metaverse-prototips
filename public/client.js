@@ -1,8 +1,7 @@
 import * as THREE from 'three';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { OutlineEffect } from 'three/addons/effects/OutlineEffect.js';
 import { handleMouseClickEvent } from './scripts/handleEvents.js';
-import { initUI, renderUI, resizeUI } from './scripts/handleUI.js';
+import { initUI, initControls, renderUI, resizeUI } from './scripts/handleUI.js';
 
 const socket = io(); // Initiate the connection between client and server
 
@@ -104,17 +103,13 @@ function init(backgroundColor) {
     renderer.setSize(window.innerWidth, window.innerHeight);
     container.appendChild(renderer.domElement);
 
-    // UI
+    // UI and Controls
     initUI(container);
+    initControls(camera);
 
     // Effects
     effect = new OutlineEffect(renderer);
-
-    // Controls
-    const controls = new OrbitControls(camera, renderer.domElement);
-    controls.minDistance = 5;
-    controls.maxDistance = 2000;
-
+    
     // Handle windows resize
     window.addEventListener('resize', onWindowResize);
 

@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { handleBuyButtonClick, handleSellButtonClick } from './handleEvents.js';
 import { scene } from '../client.js'
 
@@ -11,8 +12,18 @@ function initUI(container) {
     UIRenderer.setSize(window.innerWidth, window.innerHeight);
     UIRenderer.domElement.style.position = 'absolute';
     UIRenderer.domElement.style.top = '0px';
-    UIRenderer.domElement.style.pointerEvents = 'none';
     container.appendChild(UIRenderer.domElement);
+
+}
+
+// Initialize Controls
+function initControls(camera) {
+
+    const controls = new OrbitControls(camera, UIRenderer.domElement);
+    controls.enablePan = false;
+    controls.minDistance = 20;
+    controls.maxDistance = 2000;
+    controls.enableDamping = true;
 
 }
 
@@ -55,4 +66,4 @@ function sellButton(position) {
 
 }
 
-export { initUI, renderUI, resizeUI, buyButton, sellButton };
+export { initUI, initControls, renderUI, resizeUI, buyButton, sellButton };
