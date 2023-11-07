@@ -1,11 +1,12 @@
 import * as THREE from 'three';
+import Stats from 'three/addons/libs/stats.module.js';
 import { OutlineEffect } from 'three/addons/effects/OutlineEffect.js';
 import { handleMouseClickEvent } from './scripts/handleEvents.js';
 import { initUI, initControls, renderUI, resizeUI } from './scripts/handleUI.js';
 
 const socket = io(); // Initiate the connection between client and server
 
-export let camera, scene, renderer, effect, container;
+export let camera, scene, renderer, effect, stats;
 
 const landMap = [];
 
@@ -81,10 +82,6 @@ socket.on('sellLand', (data) => {
 
 function init(backgroundColor) {
 
-    // Canvas
-    container = document.createElement('div');
-    document.body.appendChild(container);
-
     // Camera
     camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 1, 2500);
     camera.position.set(0, 10, -10);
@@ -101,14 +98,16 @@ function init(backgroundColor) {
     renderer = new THREE.WebGLRenderer({ antialias: AA(), powerPreference: "high-performance" });
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
-    container.appendChild(renderer.domElement);
+    document.body.appendChild(renderer.domElement);
 
     // UI and Controls
-    initUI(container);
+    initUI();
     initControls(camera);
 
-    // Effects
+    // Effects and stats
     effect = new OutlineEffect(renderer);
+    stats = new Stats();
+    document.body.appendChild(stats.dom);
     
     // Handle windows resize
     window.addEventListener('resize', onWindowResize);
@@ -142,7 +141,11 @@ function onWindowResize() {
 function animate() {
 
     requestAnimationFrame(animate);
+    stats.begin();
+
     renderScene();
     renderUI(scene, camera);
+
+    stats.end();
 
 }

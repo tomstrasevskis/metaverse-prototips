@@ -1,9 +1,8 @@
 import * as THREE from 'three';
-import { buyButton, sellButton } from './handleUI.js';
-import { container } from '../client.js'
+import { createButtonLabel } from './handleUI.js';
 
 function handleMouseClickEvent(camera, landMap, socket) {
-    container.addEventListener('click', (event) => {
+    window.addEventListener('click', (event) => {
         const mouse = new THREE.Vector2();
         mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
         mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
@@ -15,9 +14,9 @@ function handleMouseClickEvent(camera, landMap, socket) {
 
         if (intersects.length > 0) {
             const land = intersects[0].object;
+            console.log("Land clicked!"); // Debug
 
-            buyButton(land.position);
-            sellButton(land.position);
+            createButtonLabel(land.position);
 
             /*// Buy land
             if (land.owner === null) {

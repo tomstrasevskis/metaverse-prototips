@@ -1,4 +1,3 @@
-import * as THREE from 'three';
 import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { handleBuyButtonClick, handleSellButtonClick } from './handleEvents.js';
@@ -7,12 +6,12 @@ import { scene } from '../client.js'
 const UIRenderer = new CSS2DRenderer();
 
 // Initialize UI
-function initUI(container) {
+function initUI() {
 
     UIRenderer.setSize(window.innerWidth, window.innerHeight);
     UIRenderer.domElement.style.position = 'absolute';
     UIRenderer.domElement.style.top = '0px';
-    container.appendChild(UIRenderer.domElement);
+    document.body.appendChild(UIRenderer.domElement);
 
 }
 
@@ -23,7 +22,6 @@ function initControls(camera) {
     controls.enablePan = false;
     controls.minDistance = 20;
     controls.maxDistance = 2000;
-    controls.enableDamping = true;
 
 }
 
@@ -40,30 +38,22 @@ function resizeUI() {
     UIRenderer.setSize(window.innerWidth, window.innerHeight);
 }
 
-// Buy button
-function buyButton(position) {
+function createButtonLabel(position) {
 
-    const button = document.createElement('button');
-    button.textContent = 'Buy';
-    button.addEventListener('click', handleBuyButtonClick);
+    // Create label
+    const labelDiv = document.getElementById('label');
 
-    const buyButtonObject = new CSS2DObject(button);
-    scene.add(buyButtonObject);
+    const label = new CSS2DObject(labelDiv);
+    scene.add(label);
 
-    buyButtonObject.position.set(position.x, position.y + 1, position.z);
+    label.position.set(position.x, position.y + 1, position.z);
 
+    // Handle buttons
+    const buyButton = document.getElementById('buyButton');
+    buyButton.addEventListener('click', handleBuyButtonClick);
+
+    const sellButton = document.getElementById('sellButton');
+    sellButton.addEventListener('click', handleSellButtonClick);
 }
 
-// Sell button
-function sellButton(position) {
-
-    const button = document.createElement('button');
-    button.textContent = 'Sell';
-    button.addEventListener('click', handleSellButtonClick);
-
-    const sellButtonObject = new CSS2DObject(button);
-    sellButtonObject.position.set(position.x, position.y + 1, position.z);
-
-}
-
-export { initUI, initControls, renderUI, resizeUI, buyButton, sellButton };
+export { initUI, initControls, renderUI, resizeUI, createButtonLabel };
