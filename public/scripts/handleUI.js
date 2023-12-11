@@ -6,7 +6,7 @@ import { scene } from '../client.js'
 const UIRenderer = new CSS2DRenderer();
 
 // Initialize UI
-function initUI() {
+export function initUI() {
 
     UIRenderer.setSize(window.innerWidth, window.innerHeight);
     UIRenderer.domElement.style.position = 'absolute';
@@ -16,7 +16,7 @@ function initUI() {
 }
 
 // Initialize Controls
-function initControls(camera) {
+export function initControls(camera) {
 
     const controls = new OrbitControls(camera, UIRenderer.domElement);
     controls.enablePan = false;
@@ -26,21 +26,21 @@ function initControls(camera) {
 }
 
 // Render UI
-function renderUI(scene, camera) {
+export function renderUI(scene, camera) {
 
     UIRenderer.render(scene, camera);
 
 }
 
 // Resize UI
-function resizeUI() {
+export function resizeUI() {
 
     UIRenderer.setSize(window.innerWidth, window.innerHeight);
 }
 
-function createButtonLabel(position) {
+export function buttonLabel(position, land) {
 
-    // Create label
+    // Create button label object
     const labelDiv = document.getElementById('label');
 
     const label = new CSS2DObject(labelDiv);
@@ -50,10 +50,8 @@ function createButtonLabel(position) {
 
     // Handle buttons
     const buyButton = document.getElementById('buyButton');
-    buyButton.addEventListener('click', handleBuyButtonClick);
+    buyButton.addEventListener('click', handleBuyButtonClick(land));
 
     const sellButton = document.getElementById('sellButton');
-    sellButton.addEventListener('click', handleSellButtonClick);
+    sellButton.addEventListener('click', handleSellButtonClick(land));
 }
-
-export { initUI, initControls, renderUI, resizeUI, createButtonLabel };

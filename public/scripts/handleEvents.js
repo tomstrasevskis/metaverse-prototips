@@ -1,7 +1,7 @@
 import * as THREE from 'three';
-import { createButtonLabel } from './handleUI.js';
+import { buttonLabel } from './handleUI.js';
 
-function handleMouseClickEvent(camera, landMap, socket) {
+export function handleMouseClickEvent(camera, landMap, socket) {
     window.addEventListener('click', (event) => {
         const mouse = new THREE.Vector2();
         mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -14,41 +14,36 @@ function handleMouseClickEvent(camera, landMap, socket) {
 
         if (intersects.length > 0) {
             const land = intersects[0].object;
-            console.log("Land clicked!"); // Debug
+            console.log("Land clicked!"); //////////// Debug
 
-            createButtonLabel(land.position);
-
-            /*// Buy land
-            if (land.owner === null) {
-                const clientName = prompt('Enter your name:');
-                if (clientName) {
-                    socket.emit('initiateLandPurchase', {
-                        id: land.landId,
-                        owner: clientName
-                    });
-                }
-            }
-            // Sell land
-            else if (land.owner !== null) {
-                socket.emit('initiateLandSell', {
-                    id: land.landId,
-                    owner: null
-                });
-            }*/
+            buttonLabel(land.position, land);
         }
     });
 }
 
-function handleBuyButtonClick() {
+export function handleBuyButtonClick() {
 
-    console.log("buy button");
+    // Buy land
+    if (land.owner === null) {
+        const clientName = prompt('Enter your name:');
+        if (clientName) {
+            socket.emit('initiateLandPurchase', {
+                id: land.landId,
+                owner: clientName
+            });
+        }
+    }
 
 }
 
-function handleSellButtonClick() {
+export function handleSellButtonClick() {
 
-    console.log("sell button");
+    // Sell land
+    if (land.owner !== null) {
+        socket.emit('initiateLandSell', {
+            id: land.landId,
+            owner: null
+        });
+    }
 
 }
-
-export { handleMouseClickEvent, handleBuyButtonClick, handleSellButtonClick };
