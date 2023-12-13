@@ -16,13 +16,14 @@ export function handleMouseClickEvent(camera, landMap, socket) {
             const land = intersects[0].object;
             console.log("Land clicked!"); //////////// Debug
 
-            buttonLabel(land.position, land);
+            buttonLabel(land.position, land, socket);
         }
     });
 }
 
-export function handleBuyButtonClick() {
+export function handleBuyButtonClick(land, socket) {
 
+    console.log("Buy button!");
     // Buy land
     if (land.owner === null) {
         const clientName = prompt('Enter your name:');
@@ -36,8 +37,9 @@ export function handleBuyButtonClick() {
 
 }
 
-export function handleSellButtonClick() {
+export function handleSellButtonClick(land, socket) {
 
+    console.log("Sell button!");
     // Sell land
     if (land.owner !== null) {
         socket.emit('initiateLandSell', {

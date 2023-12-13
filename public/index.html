@@ -6,8 +6,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Virtuala Latvija</title>
 
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <link rel="stylesheet" href="style.css">
-  <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+
+  <!-- Import Map -->
   <script type="importmap">
     {
       "imports": {
@@ -15,15 +17,22 @@
         "three/addons/": "https://unpkg.com/three@0.159.0/examples/jsm/"
       }
     }
-    </script>
+  </script>
+
+  <!-- Scripts -->
+  <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+  <script type="module" src="scripts/handleEvents.js"></script>
+  <script type="module" src="scripts/handleUI.js"></script>
   <script type="module" src="client.js"></script>
+
 </head>
-
 <body>
-  <div id="label">
-    <button id="buyButton" style="--clr:#219C90"><span>Buy</span><i></i></button>
-    <button id="sellButton" style="--clr:#D83F31"><span>Sell</span><i></i></button>
-  </div>
-</body>
 
+  <!-- Label -->
+  <div id="label" class="hidden">
+    <button id="buyButton" style="--clr:#219C90">Buy</button>
+    <button id="sellButton" style="--clr:#D83F31">Sell</button>
+  </div>
+
+</body>
 </html>

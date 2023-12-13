@@ -38,20 +38,22 @@ export function resizeUI() {
     UIRenderer.setSize(window.innerWidth, window.innerHeight);
 }
 
-export function buttonLabel(position, land) {
+export function buttonLabel(position, land, socket) {
 
     // Create button label object
     const labelDiv = document.getElementById('label');
+    labelDiv.classList.remove("hidden");
 
     const label = new CSS2DObject(labelDiv);
     scene.add(label);
 
     label.position.set(position.x, position.y + 1, position.z);
 
-    // Handle buttons
+    // Handle buy button
     const buyButton = document.getElementById('buyButton');
-    buyButton.addEventListener('click', handleBuyButtonClick(land));
+    buyButton.addEventListener('click', handleBuyButtonClick(land, socket));
 
+    // Handle sell button
     const sellButton = document.getElementById('sellButton');
-    sellButton.addEventListener('click', handleSellButtonClick(land));
+    sellButton.addEventListener('click', handleSellButtonClick(land, socket));
 }
