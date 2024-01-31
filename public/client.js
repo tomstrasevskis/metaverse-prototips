@@ -1,19 +1,26 @@
 import * as THREE from 'three';
 import Stats from 'three/addons/libs/stats.module.js';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { OutlineEffect } from 'three/addons/effects/OutlineEffect.js';
+import { handleMouseClickEvent } from './scripts/handleEvents.js';
+import { initUI, initControls, renderUI, resizeUI } from './scripts/handleUI.js';
 
-const socket = io(); // Initiate the connection between client and server
+export const socket = io(); // Initiate the connection between client and server
 
-let camera, scene, renderer, effect;
-let container, stats;
+export let camera, scene, renderer, effect, stats;
 
 const landMap = [];
 
 let landSize, landColor, ownedLandColor;
 
+const EVENTS = {
+    VARIABLES: 'variables',
+    MAP_DATA: 'mapData',
+    PURCHASE_LAND: 'purchaseLand',
+    SELL_LAND: 'sellLand',
+};
+
 // Receive the variables from the server
-socket.on('variables', (initialVariables) => {
+socket.on(EVENTS.VARIABLES, (initialVariables) => {
 
     let backgroundColor = initialVariables.backgroundColor;
 
@@ -28,7 +35,7 @@ socket.on('variables', (initialVariables) => {
 });
 
 // Load the map
-socket.on('mapData', loadMap);
+socket.on(EVENTS.MAP_DATA, loadMap);
 
 function loadMap(mapData) {
     mapData.forEach(land => {
@@ -36,7 +43,7 @@ function loadMap(mapData) {
         const material = new THREE.MeshToonMaterial({ color: landColor });
         const landMesh = new THREE.Mesh(geometry, material);
 
-        landMesh.position.set(land.position[0] * landSize, 0, land.position[1] * landSize);
+        landMesh.position.set(land.position[0] * (landSize + 0.1), 0, land.position[1] * (landSize + 0.1));
         landMesh.landId = land.id;
         landMesh.owner = land.owner;
 
@@ -54,42 +61,7 @@ function loadMap(mapData) {
     });
 }
 
-window.addEventListener('click', (event) => {
-    const mouse = new THREE.Vector2();
-    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-
-    const raycaster = new THREE.Raycaster();
-    raycaster.setFromCamera(mouse, camera);
-
-    const intersects = raycaster.intersectObjects(landMap);
-
-    if (intersects.length > 0) {
-        const land = intersects[0].object;
-
-        // Buy land
-        if (land.owner === null) {
-
-            const clientName = prompt('Enter your name:');
-            if (clientName) {
-                socket.emit('initiateLandPurchase', {
-                    id: land.landId,
-                    owner: clientName
-                })
-            }
-        }
-        // Sell land
-        else if (land.owner !== null) {
-
-            socket.emit('initiateLandSell', {
-                id: land.landId,
-                owner: null
-            })
-        }
-    }
-});
-
-socket.on('purchaseLand', (data) => {
+socket.on(EVENTS.PURCHASE_LAND, (data) => {
     const land = landMap.find((landMesh) => landMesh.landId === data.id);
 
     // Checks if land with that id exists
@@ -102,7 +74,7 @@ socket.on('purchaseLand', (data) => {
     }
 });
 
-socket.on('sellLand', (data) => {
+socket.on(EVENTS.SELL_LAND, (data) => {
     const land = landMap.find((landMesh) => landMesh.landId === data.id);
 
     // Checks if land with that id exists
@@ -116,10 +88,6 @@ socket.on('sellLand', (data) => {
 });
 
 function init(backgroundColor) {
-
-    // Canvas
-    container = document.createElement('div');
-    document.body.appendChild(container);
 
     // Camera
     camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 1, 2500);
@@ -137,23 +105,25 @@ function init(backgroundColor) {
     renderer = new THREE.WebGLRenderer({ antialias: AA(), powerPreference: "high-performance" });
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
-    container.appendChild(renderer.domElement);
+    document.body.appendChild(renderer.domElement);
+
+    // UI and Controls
+    initUI();
+    initControls(camera);
 
     // Effects and stats
     effect = new OutlineEffect(renderer);
     stats = new Stats();
-    container.appendChild(stats.dom);
-
-    // Controls
-    const controls = new OrbitControls(camera, renderer.domElement);
-    controls.minDistance = 5;
-    controls.maxDistance = 2000;
-
+    document.body.appendChild(stats.dom);
+    
     // Handle windows resize
     window.addEventListener('resize', onWindowResize);
+
+    // Handle mouse events
+    handleMouseClickEvent(camera, landMap);
 }
 
-function render() {
+function renderScene() {
     effect.render(scene, camera);
 }
 
@@ -171,15 +141,18 @@ function onWindowResize() {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
+    resizeUI();
 
 }
 
 function animate() {
 
     requestAnimationFrame(animate);
-
     stats.begin();
-    render();
+
+    renderScene();
+    renderUI(scene, camera);
+
     stats.end();
 
 }

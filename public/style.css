@@ -1,20 +1,71 @@
+.hidden {
+    display: none;
+}
+
+#label {
+    background-color: #202020;
+    color: white;
+    padding: 10px;
+    position: relative;
+    transform: translateY(-10px);
+    transition-duration: 0.05s;
+    transition-property: opacity, transform;
+    justify-content: center;
+    align-items: center;
+}
+
+#label::after {
+    position: absolute;
+    content: '';
+    width: 20px;
+    height: 20px;
+    background-color: #202020;
+    top: 90%;
+    left: 50%;
+    transform: rotateZ(45deg) translateX(-50%);
+    z-index: -1;
+}
+
+button {
+    width: 100px;
+    height: 50px;
+    cursor: pointer;
+    position: relative;
+    background: #444;
+    color: #fff;
+    text-decoration: none;
+    text-transform: uppercase;
+    border: none;
+    letter-spacing: 0.05rem;
+    font-size: 1rem;
+    padding: 0.55em 1.5em;
+    transition: 0.2s;
+}
+
+button:hover {
+    letter-spacing: 0.1rem;
+    padding: 0.55em 1.55em;
+    background: var(--clr);
+    color: #fff;
+    animation: box 3s infinite;
+}
+
+@keyframes box {
+    0% {
+        box-shadow: #27272c;
+    }
+
+    50% {
+        box-shadow: 0 0 25px var(--clr);
+    }
+
+    100% {
+        box-shadow: #27272c;
+    }
+}
+
 body {
     height: 100%;
     margin: 0;
-    overflow: hidden; /* to prevent body overflow */
-}
-
-#canvas-container {
-    width: 100%;
-    height: 100vh; /* or a fixed value */
-    overflow: hidden; /* to hide scrollbars if they appear */
-}
-
-#gameCanvas {
-    max-width: 100%;
-    max-height: 100%;
-
-    width: 100%;
-    height: 100%;
-    display: block; /* eliminates extra space under the canvas */
+    overflow: hidden;
 }

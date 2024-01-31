@@ -1,8 +1,6 @@
-
 # Simple Metaverse Prototype
 
-Metaverse protoype that uses Express.js and Socket.IO to host and connect a server with the clients. The   
-frontend code uses Three.js to render everything in the client browser.
+A Metaverse prototype is developed using Express.js and Socket.IO, facilitating server hosting and client connections. The frontend utilizes Three.js to render a dynamic map scene within the client's browser. During the initial run, all map data is generated dynamically.
 
 ---
 ## Requirements
@@ -46,20 +44,31 @@ If you need to update `npm`, you can make it using `npm`! Cool right? After runn
 
 ## Configure app
 
-Open `src/config.js` then edit the following values to your liking.
+To customize the application, open `src/config.js` and modify the following parameters to suit your preferences.
 
-The basic server and map settings:
- - `port`  [default value: `3000`]
- - `mapPath`  [default value: `./src/mapData.json`]
- - `landSize`  [default value: `10`]
+### Basic Server Settings:
+- `port`  
+  - Default: `3000`
+- `mapPath`  
+  - Default: `./src/mapData.json`
+- `mapAlgorithm`  
+  - Default: `./src/mapAlgorithm.js`
 
-The settings for the object colors in the scene:
- - `backgroundColor`  [default value: `0xffeeee`]
- - `landColor`  [default value: `0x00ff00`]
- - `ownedLandColor`  [default value: `0xff0000`]
+### Map Scene Settings:
+- `mapSize`  
+  - Default: `4`
+- `landSize`  
+  - Default: `10`
 
- 
+### Scene Color Settings:
+- `backgroundColor`  
+  - Default: `0xffeeee`
+- `landColor`  
+  - Default: `0x00ff00`
+- `ownedLandColor`  
+  - Default: `0xff0000`
 
+This configuration allows you to fine-tune the basic server parameters, map scene characteristics, and color settings for a personalized experience.
 
 ## Running the project
 
