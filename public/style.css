@@ -5,11 +5,13 @@
 #label {
     background-color: #202020;
     color: white;
-    padding: 0.5rem;
+    padding: 10px;
     position: relative;
     transform: translateY(-10px);
     transition-duration: 0.05s;
     transition-property: opacity, transform;
+    justify-content: center;
+    align-items: center;
 }
 
 #label::after {
@@ -25,6 +27,8 @@
 }
 
 button {
+    width: 100px;
+    height: 50px;
     cursor: pointer;
     position: relative;
     background: #444;

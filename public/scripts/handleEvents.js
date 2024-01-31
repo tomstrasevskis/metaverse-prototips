@@ -1,7 +1,9 @@
 import * as THREE from 'three';
-import { buttonLabel } from './handleUI.js';
+import { moveButtonLabel, hideButtonLabel } from './handleUI.js';
 
-export function handleMouseClickEvent(camera, landMap, socket) {
+export let land;
+
+export function handleMouseClickEvent(camera, landMap) {
     window.addEventListener('click', (event) => {
         const mouse = new THREE.Vector2();
         mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -13,39 +15,44 @@ export function handleMouseClickEvent(camera, landMap, socket) {
         const intersects = raycaster.intersectObjects(landMap);
 
         if (intersects.length > 0) {
-            const land = intersects[0].object;
-            console.log("Land clicked!"); //////////// Debug
 
-            buttonLabel(land.position, land, socket);
+            land = intersects[0].object;
+            moveButtonLabel(land.position);
+
+        } else  {
+            hideButtonLabel();
         }
     });
 }
 
 export function handleBuyButtonClick(land, socket) {
 
-    console.log("Buy button!");
     // Buy land
     if (land.owner === null) {
-        const clientName = prompt('Enter your name:');
+        let clientName = prompt('Enter your name:');
         if (clientName) {
             socket.emit('initiateLandPurchase', {
                 id: land.landId,
                 owner: clientName
             });
+            hideButtonLabel();
         }
+    } else {
+        hideButtonLabel();
     }
 
 }
 
 export function handleSellButtonClick(land, socket) {
 
-    console.log("Sell button!");
     // Sell land
     if (land.owner !== null) {
         socket.emit('initiateLandSell', {
             id: land.landId,
             owner: null
         });
+    } else {
+        hideButtonLabel();
     }
 
 }

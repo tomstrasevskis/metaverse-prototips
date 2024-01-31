@@ -4,7 +4,7 @@ import { OutlineEffect } from 'three/addons/effects/OutlineEffect.js';
 import { handleMouseClickEvent } from './scripts/handleEvents.js';
 import { initUI, initControls, renderUI, resizeUI } from './scripts/handleUI.js';
 
-const socket = io(); // Initiate the connection between client and server
+export const socket = io(); // Initiate the connection between client and server
 
 export let camera, scene, renderer, effect, stats;
 
@@ -12,8 +12,15 @@ const landMap = [];
 
 let landSize, landColor, ownedLandColor;
 
+const EVENTS = {
+    VARIABLES: 'variables',
+    MAP_DATA: 'mapData',
+    PURCHASE_LAND: 'purchaseLand',
+    SELL_LAND: 'sellLand',
+};
+
 // Receive the variables from the server
-socket.on('variables', (initialVariables) => {
+socket.on(EVENTS.VARIABLES, (initialVariables) => {
 
     let backgroundColor = initialVariables.backgroundColor;
 
@@ -28,7 +35,7 @@ socket.on('variables', (initialVariables) => {
 });
 
 // Load the map
-socket.on('mapData', loadMap);
+socket.on(EVENTS.MAP_DATA, loadMap);
 
 function loadMap(mapData) {
     mapData.forEach(land => {
@@ -36,7 +43,7 @@ function loadMap(mapData) {
         const material = new THREE.MeshToonMaterial({ color: landColor });
         const landMesh = new THREE.Mesh(geometry, material);
 
-        landMesh.position.set(land.position[0] * landSize, 0, land.position[1] * landSize);
+        landMesh.position.set(land.position[0] * (landSize + 0.1), 0, land.position[1] * (landSize + 0.1));
         landMesh.landId = land.id;
         landMesh.owner = land.owner;
 
@@ -54,7 +61,7 @@ function loadMap(mapData) {
     });
 }
 
-socket.on('purchaseLand', (data) => {
+socket.on(EVENTS.PURCHASE_LAND, (data) => {
     const land = landMap.find((landMesh) => landMesh.landId === data.id);
 
     // Checks if land with that id exists
@@ -67,7 +74,7 @@ socket.on('purchaseLand', (data) => {
     }
 });
 
-socket.on('sellLand', (data) => {
+socket.on(EVENTS.SELL_LAND, (data) => {
     const land = landMap.find((landMesh) => landMesh.landId === data.id);
 
     // Checks if land with that id exists
@@ -113,7 +120,7 @@ function init(backgroundColor) {
     window.addEventListener('resize', onWindowResize);
 
     // Handle mouse events
-    handleMouseClickEvent(camera, landMap, socket);
+    handleMouseClickEvent(camera, landMap);
 }
 
 function renderScene() {
