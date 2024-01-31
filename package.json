@@ -6,6 +6,7 @@
   },
   "type": "module",
   "scripts": {
-    "server": "nodemon --ignore src/mapData.json src/server.js"
+    "server": "node src/server.js",
+    "dev": "nodemon --ignore src/mapData.json src/server.js"
   }
 }
