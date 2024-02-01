@@ -24,7 +24,7 @@ function generatePosition(row, col) {
 const data = { "land": land };
 const jsonData = JSON.stringify(data, null, 2);
 
-fs.writeFile('src/mapData.json', jsonData, (err) => {
+fs.writeFile(config.mapPath, jsonData, (err) => {
     if (err) {
         console.error('Error writing JSON file: ', err);
     } else {
